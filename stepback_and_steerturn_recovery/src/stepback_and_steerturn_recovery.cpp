@@ -171,10 +171,10 @@ double StepBackAndSteerTurnRecovery::normalizedPoseCost (const gm::Pose2D& pose)
   p.x = pose.x;
   p.y = pose.y;
 
-  unsigned int pose_map_idx_x, pose_map_idx_y;
+  int pose_map_idx_x, pose_map_idx_y;
   costmap_2d::Costmap2D* costmap = local_costmap_->getCostmap();
-  costmap->worldToMap(p.x, p.y, pose_map_idx_x, pose_map_idx_y);  // convert point unit from [m] to [idx]
-  ROS_DEBUG_NAMED ("top", "Trying to get cost at (%d, %d) in getCost", pose_map_idx_x, pose_map_idx_y);
+  costmap->worldToMapEnforceBounds(p.x, p.y, pose_map_idx_x, pose_map_idx_y);  // convert point unit from [m] to [idx]
+  ROS_DEBUG_NAMED ("top", "Trying to get cost at (%f, %f - > %d, %d) in getCost", p.x, p.y, pose_map_idx_x, pose_map_idx_y);
   const double c = costmap->getCost(pose_map_idx_x, pose_map_idx_y);
 
   return c < 0 ? 1e9 : c;
